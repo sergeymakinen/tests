@@ -145,7 +145,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * Invokes the private/protected method by its name and returns its result.
-     * 
+     *
      * @param object|string $object
      * @param string $name
      * @param array $args
