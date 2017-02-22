@@ -127,27 +127,41 @@ class TestCaseTest extends TestCase
         throw new \RuntimeException('', 41);
     }
 
+    public function objectProvider()
+    {
+        return [
+            'static' => ['SergeyMakinen\Tests\Stubs\Class2', 'Static'],
+            'instance' => [new Class2(), ''],
+        ];
+    }
+
     /**
      * @covers \SergeyMakinen\Tests\TestCase::getProperty()
      * @covers \SergeyMakinen\Tests\TestCase::getInaccessibleProperty()
      * @covers \SergeyMakinen\Tests\TestCase::setInaccessibleProperty()
      * @covers \SergeyMakinen\Tests\TestCase::invokeInaccessibleMethod()
+     * @dataProvider objectProvider
+     *
+     * @param object|string $object
+     * @param string $nameSuffix
      */
-    public function testGetSetInvoke()
+    public function testGetSetInvoke($object, $nameSuffix)
     {
-        $instance = new Class2();
-        $this->assertSame('private1', $this->getInaccessibleProperty($instance, '_private1'));
-        $this->assertSame('private2', $this->getInaccessibleProperty($instance, '_private2'));
-        $this->assertSame('protected2', $this->getInaccessibleProperty($instance, '_protected'));
-        $this->setInaccessibleProperty($instance, '_private1', '_private1');
-        $this->setInaccessibleProperty($instance, '_private2', '_private2');
-        $this->setInaccessibleProperty($instance, '_protected', '_protected2');
-        $this->assertSame('_private1', $this->getInaccessibleProperty($instance, '_private1'));
-        $this->assertSame('_private2', $this->getInaccessibleProperty($instance, '_private2'));
-        $this->assertSame('_protected2', $this->getInaccessibleProperty($instance, '_protected'));
-        $this->assertSame('private1', $this->invokeInaccessibleMethod($instance, '_private1'));
-        $this->assertSame('private2', $this->invokeInaccessibleMethod($instance, '_private2'));
-        $this->assertSame('protected2', $this->invokeInaccessibleMethod($instance, '_protected'));
+        $this->assertSame('private1', $this->getInaccessibleProperty($object, '_private1' . $nameSuffix));
+        $this->assertSame('private2', $this->getInaccessibleProperty($object, '_private2' . $nameSuffix));
+        $this->assertSame('protected2', $this->getInaccessibleProperty($object, '_protected' . $nameSuffix));
+
+        $this->setInaccessibleProperty($object, '_private1' . $nameSuffix, '_private1');
+        $this->setInaccessibleProperty($object, '_private2' . $nameSuffix, '_private2');
+        $this->setInaccessibleProperty($object, '_protected' . $nameSuffix, '_protected2');
+
+        $this->assertSame('_private1', $this->getInaccessibleProperty($object, '_private1' . $nameSuffix));
+        $this->assertSame('_private2', $this->getInaccessibleProperty($object, '_private2' . $nameSuffix));
+        $this->assertSame('_protected2', $this->getInaccessibleProperty($object, '_protected' . $nameSuffix));
+
+        $this->assertSame('private1', $this->invokeInaccessibleMethod($object, '_private1' . $nameSuffix));
+        $this->assertSame('private2', $this->invokeInaccessibleMethod($object, '_private2' . $nameSuffix));
+        $this->assertSame('protected2', $this->invokeInaccessibleMethod($object, '_protected' . $nameSuffix));
     }
 
     protected function executeOverriddenAndParentMethod($name, \Closure $closure)

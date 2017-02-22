@@ -126,7 +126,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         $property = $this->getProperty($object, $name);
         $property->setAccessible(true);
-        return $property->getValue($object);
+        return $property->getValue(is_object($object) ? $object : null);
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         $property = $this->getProperty($object, $name);
         $property->setAccessible(true);
-        $property->setValue($object, $value);
+        $property->setValue(is_object($object) ? $object : null, $value);
     }
 
     /**
@@ -155,6 +155,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         $method = new \ReflectionMethod($object, $name);
         $method->setAccessible(true);
-        return $method->invokeArgs($object, $args);
+        return $method->invokeArgs(is_object($object) ? $object : null, $args);
     }
 }
