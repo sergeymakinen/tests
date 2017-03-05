@@ -1,6 +1,6 @@
 # Common PHPUnit tests stuff
 
-Common tests stuff for PHPUnit tests. Compatible with PHPUnit:
+Common tests stuff for PHPUnit tests. Version 1.1 or higher is  compatible with PHPUnit:
 
 - 4.8.35 or higher
 - 5.4.3 or higher
