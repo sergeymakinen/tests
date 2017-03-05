@@ -9,7 +9,10 @@
 
 namespace SergeyMakinen\Tests;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\Exception;
+use PHPUnit\Util\InvalidArgumentHelper;
+
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -62,7 +65,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Sets an exception expected.
      *
      * @param string $exception
-     * @throws \PHPUnit_Framework_Exception
+     * @throws Exception|\PHPUnit_Framework_Exception
      */
     public function expectException($exception)
     {
@@ -72,7 +75,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         if (!is_string($exception)) {
-            throw \PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+            if (class_exists('PHPUnit\Util\InvalidArgumentHelper')) {
+                throw InvalidArgumentHelper::factory(1, 'string');
+            } else {
+                throw \PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
+            }
         }
 
         $this->expectedException = $exception;
@@ -83,7 +90,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Sets an exception code expected.
      *
      * @param int|string $code
-     * @throws \PHPUnit_Framework_Exception
+     * @throws Exception|\PHPUnit_Framework_Exception
      */
     public function expectExceptionCode($code)
     {
@@ -93,7 +100,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         if (!is_int($code) && !is_string($code)) {
-            throw \PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer or string');
+            if (class_exists('PHPUnit\Util\InvalidArgumentHelper')) {
+                throw InvalidArgumentHelper::factory(1, 'integer or string');
+            } else {
+                throw \PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer or string');
+            }
         }
 
         $this->setExpectedException($this->expectedException, '', $code);

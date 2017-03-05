@@ -1,6 +1,12 @@
-# Common tests stuff
+# Common PHPUnit tests stuff
 
-Common tests stuff. I use it in my library tests but you're also free to use. :)
+Common tests stuff for PHPUnit tests. Compatible with PHPUnit:
+
+- 4.8.35 or higher
+- 5.4.3 or higher
+- 6.0.3 or higher
+
+I use it in my library tests but you're also free to use. :)
 
 [![Code Quality](https://img.shields.io/scrutinizer/g/sergeymakinen/tests.svg?style=flat-square)](https://scrutinizer-ci.com/g/sergeymakinen/tests) [![Build Status](https://img.shields.io/travis/sergeymakinen/tests.svg?style=flat-square)](https://travis-ci.org/sergeymakinen/tests) [![Code Coverage](https://img.shields.io/codecov/c/github/sergeymakinen/tests.svg?style=flat-square)](https://codecov.io/gh/sergeymakinen/tests) [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/972b722f-b194-4de7-9eed-24f77bc8c9e2.svg?style=flat-square)](https://insight.sensiolabs.com/projects/972b722f-b194-4de7-9eed-24f77bc8c9e2)
 
@@ -29,6 +35,6 @@ to the require-dev section of your `composer.json` file.
 ```php
 class MyClassTest extends \SergeyMakinen\Tests\TestCase
 {
-    // Use protected methods defined in the TestCase class
+    //
 }
 ```

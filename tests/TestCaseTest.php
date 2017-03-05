@@ -4,15 +4,19 @@ namespace SergeyMakinen\Tests;
 
 use SergeyMakinen\Tests\Stubs\Class2;
 
+/**
+ * @coversDefaultClass \SergeyMakinen\Tests\TestCase
+ * @covers ::<private>
+ */
 class TestCaseTest extends TestCase
 {
     /**
      * @var array
      */
-    protected $isParentMethodOverride = [];
+    protected $isParentMethodOverriden = [];
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::isParentMethod()
+     * @covers ::isParentMethod
      */
     public function testIsParentMethod()
     {
@@ -21,7 +25,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::createMock()
+     * @covers ::createMock
      */
     public function testCreateMock()
     {
@@ -40,52 +44,66 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::expectException()
+     * @covers ::expectException
      */
-    public function testExpectExceptionOverridden()
+    public function testOverriddenExpectException()
     {
-        $this->isParentMethodOverride = ['expectException' => false];
-        $this->expectException('\RuntimeException');
+        if (!method_exists($this, 'setExpectedException')) {
+            $this->markTestSkipped('PHPUnit\Framework\TestCase::setExpectedException() does not exist.');
+            return;
+        }
+
+        $this->isParentMethodOverriden = ['expectException' => false];
+        $this->expectException('RuntimeException');
         throw new \RuntimeException();
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::expectException()
+     * @covers ::expectException
      */
-    public function testExpectExceptionOverriddenError()
+    public function testOverriddenExpectExceptionError()
     {
-        $this->isParentMethodOverride = ['expectException' => false];
+        $this->isParentMethodOverriden = ['expectException' => false];
         $exception = null;
         try {
             $this->expectException([]);
         } catch (\RuntimeException $e) {
             $exception = $e;
         }
-        $this->assertInstanceOf('\PHPUnit_Framework_Exception', $exception);
+        if (class_exists('PHPUnit\Framework\Exception')) {
+            $this->assertInstanceOf('PHPUnit\Framework\Exception', $exception);
+        } else {
+            $this->assertInstanceOf('PHPUnit_Framework_Exception', $exception);
+        }
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::expectException()
+     * @covers ::expectException
      */
-    public function testExpectExceptionParent()
+    public function testParentExpectException()
     {
         if (!parent::isParentMethod('expectException')) {
-            $this->markTestIncomplete('`PHPUnit_Framework_TestCase::expectException` does not exist.');
+            $this->markTestSkipped('PHPUnit\Framework\TestCase::expectException() does not exist.');
             return;
         }
 
-        $this->isParentMethodOverride = ['expectException' => true];
-        $this->expectException('\RuntimeException');
+        $this->isParentMethodOverriden = ['expectException' => true];
+        $this->expectException('RuntimeException');
         throw new \RuntimeException();
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::expectExceptionCode()
-     * @covers \SergeyMakinen\Tests\TestCase::tearDown()
+     * @covers ::expectExceptionCode
+     * @covers ::tearDown
      */
-    public function testExpectExceptionCodeOverridden()
+    public function testOverriddenExpectExceptionCode()
     {
-        $this->isParentMethodOverride = [
+        if (!method_exists($this, 'setExpectedException')) {
+            $this->markTestSkipped('PHPUnit\Framework\TestCase::setExpectedException() does not exist.');
+            return;
+        }
+
+        $this->isParentMethodOverriden = [
             'expectException' => false,
             'expectExceptionCode' => false,
         ];
@@ -95,34 +113,38 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::expectExceptionCode()
-     * @covers \SergeyMakinen\Tests\TestCase::tearDown()
+     * @covers ::expectExceptionCode
+     * @covers ::tearDown
      */
-    public function testExpectExceptionCodeOverriddenError()
+    public function testOverriddenExpectExceptionCodeError()
     {
-        $this->isParentMethodOverride = ['expectExceptionCode' => false];
+        $this->isParentMethodOverriden = ['expectExceptionCode' => false];
         $exception = null;
         try {
             $this->expectExceptionCode([]);
         } catch (\RuntimeException $e) {
             $exception = $e;
         }
-        $this->assertInstanceOf('\PHPUnit_Framework_Exception', $exception);
+        if (class_exists('PHPUnit\Framework\Exception')) {
+            $this->assertInstanceOf('PHPUnit\Framework\Exception', $exception);
+        } else {
+            $this->assertInstanceOf('PHPUnit_Framework_Exception', $exception);
+        }
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::expectExceptionCode()
-     * @covers \SergeyMakinen\Tests\TestCase::tearDown()
+     * @covers ::expectExceptionCode
+     * @covers ::tearDown
      */
-    public function testExpectExceptionCodeParent()
+    public function testParentExpectExceptionCode()
     {
         if (!parent::isParentMethod('expectExceptionCode')) {
-            $this->markTestIncomplete('`PHPUnit_Framework_TestCase::expectExceptionCode` does not exist.');
+            $this->markTestSkipped('PHPUnit\Framework\TestCase::expectExceptionCode() does not exist.');
             return;
         }
 
-        $this->isParentMethodOverride = ['expectExceptionCode' => true];
-        $this->expectException('\RuntimeException');
+        $this->isParentMethodOverriden = ['expectExceptionCode' => true];
+        $this->expectException('RuntimeException');
         $this->expectExceptionCode(41);
         throw new \RuntimeException('', 41);
     }
@@ -136,10 +158,10 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @covers \SergeyMakinen\Tests\TestCase::getProperty()
-     * @covers \SergeyMakinen\Tests\TestCase::getInaccessibleProperty()
-     * @covers \SergeyMakinen\Tests\TestCase::setInaccessibleProperty()
-     * @covers \SergeyMakinen\Tests\TestCase::invokeInaccessibleMethod()
+     * @covers ::getProperty
+     * @covers ::getInaccessibleProperty
+     * @covers ::setInaccessibleProperty
+     * @covers ::invokeInaccessibleMethod
      * @dataProvider objectProvider
      *
      * @param object|string $object
@@ -166,18 +188,18 @@ class TestCaseTest extends TestCase
 
     protected function executeOverriddenAndParentMethod($name, \Closure $closure)
     {
-        $this->isParentMethodOverride = [$name => false];
+        $this->isParentMethodOverriden = [$name => false];
         $closure();
-        $this->isParentMethodOverride = [];
+        $this->isParentMethodOverriden = [];
 
         if (!parent::isParentMethod($name)) {
-            $this->markTestIncomplete('`PHPUnit_Framework_TestCase::' . $name . '` does not exist.');
+            $this->markTestIncomplete('PHPUnit\Framework\TestCase::' . $name . '() does not exist.');
             return;
         }
 
-        $this->isParentMethodOverride = [$name => true];
+        $this->isParentMethodOverriden = [$name => true];
         $closure();
-        $this->isParentMethodOverride = [];
+        $this->isParentMethodOverriden = [];
     }
 
     /**
@@ -185,11 +207,11 @@ class TestCaseTest extends TestCase
      */
     protected function isParentMethod($name)
     {
-        if (!isset($this->isParentMethodOverride[$name])) {
+        if (!isset($this->isParentMethodOverriden[$name])) {
             return parent::isParentMethod($name);
         } else {
-            $value = $this->isParentMethodOverride[$name];
-            unset($this->isParentMethodOverride[$name]);
+            $value = $this->isParentMethodOverriden[$name];
+            unset($this->isParentMethodOverriden[$name]);
             return $value;
         }
     }
@@ -200,6 +222,6 @@ class TestCaseTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->isParentMethodOverride = [];
+        $this->isParentMethodOverriden = [];
     }
 }
