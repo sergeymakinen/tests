@@ -157,7 +157,6 @@ class TestCaseTest extends TestCase
         /** @var \PHPUnit_Framework_TestSuite|\PHPUnit\Framework\TestSuite $suite */
         $suite = new $class();
         $suite->addTestFile(__DIR__ . '/FailingTestsTest.php');
-        $suite->setRunTestInSeparateProcess(true);
         $result = $suite->run();
         $this->assertSame($result->count(), $result->failureCount());
     }

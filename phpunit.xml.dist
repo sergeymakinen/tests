@@ -29,7 +29,7 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist processUncoveredFilesFromWhitelist="false">
             <directory suffix=".php">./src</directory>
             <exclude>
                 <directory suffix="Exception.php">./src</directory>
