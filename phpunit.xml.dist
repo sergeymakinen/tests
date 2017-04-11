@@ -25,6 +25,7 @@
         <testsuite name="Test Suite">
             <directory suffix="Test.php">./tests</directory>
             <exclude>./tests/runtime</exclude>
+            <exclude>./tests/FailingTestsTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>

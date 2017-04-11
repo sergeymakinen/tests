@@ -31,4 +31,9 @@ class Class1
     {
         return 'protected1';
     }
+
+    public function foobar($foo)
+    {
+        return 'foo' . $foo . 'bar';
+    }
 }

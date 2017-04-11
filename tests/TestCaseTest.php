@@ -11,17 +11,95 @@ use SergeyMakinen\Tests\Stubs\Class2;
 class TestCaseTest extends TestCase
 {
     /**
-     * @var array
+     * @covers ::expectException
      */
-    protected $isParentMethodOverriden = [];
+    public function testExpectException()
+    {
+        $this->expectException('RuntimeException');
+        throw new \RuntimeException();
+    }
 
     /**
-     * @covers ::isParentMethod
+     * @covers ::expectException
      */
-    public function testIsParentMethod()
+    public function testExpectExceptionWithInvalidData()
     {
-        $this->assertTrue($this->isParentMethod('getExpectedException'));
-        $this->assertFalse($this->isParentMethod(__FUNCTION__));
+        $exception = null;
+        try {
+            $this->expectException([]);
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+        $this->assertInstanceOfFrameworkException($exception);
+    }
+
+    /**
+     * @covers ::expectExceptionCode
+     */
+    public function testExpectExceptionCode()
+    {
+        $this->expectExceptionCode(42);
+        throw new \RuntimeException('', 42);
+    }
+
+    /**
+     * @covers ::expectExceptionCode
+     */
+    public function testExpectExceptionCodeWithInvalidData()
+    {
+        $exception = null;
+        try {
+            $this->expectExceptionCode([]);
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+        $this->assertInstanceOfFrameworkException($exception);
+    }
+
+    /**
+     * @covers ::expectExceptionMessage
+     */
+    public function testExpectExceptionMessage()
+    {
+        $this->expectExceptionMessage('foo');
+        throw new \RuntimeException('foo');
+    }
+
+    /**
+     * @covers ::expectExceptionMessage
+     */
+    public function testExpectExceptionMessageWithInvalidData()
+    {
+        $exception = null;
+        try {
+            $this->expectExceptionMessage([]);
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+        $this->assertInstanceOfFrameworkException($exception);
+    }
+
+    /**
+     * @covers ::expectExceptionMessageRegExp
+     */
+    public function testExpectExceptionMessageRegExp()
+    {
+        $this->expectExceptionMessageRegExp('/^\d+$/');
+        throw new \RuntimeException('41');
+    }
+
+    /**
+     * @covers ::expectExceptionMessageRegExp
+     */
+    public function testExpectExceptionMessageRegExpWithInvalidData()
+    {
+        $exception = null;
+        try {
+            $this->expectExceptionMessageRegExp([]);
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+        $this->assertInstanceOfFrameworkException($exception);
     }
 
     /**
@@ -29,124 +107,11 @@ class TestCaseTest extends TestCase
      */
     public function testCreateMock()
     {
-        $expected = $this
-            ->getMockBuilder('SergeyMakinen\Tests\Stubs\Class1')
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning();
-        if (method_exists($expected, 'disallowMockingUnknownTypes')) {
-            $expected->disallowMockingUnknownTypes();
-        }
-        $expected = $expected->getMock();
-        $this->executeOverriddenAndParentMethod('createMock', function () use ($expected) {
-            $this->assertEquals($expected, $this->createMock('SergeyMakinen\Tests\Stubs\Class1'));
-        });
-    }
-
-    /**
-     * @covers ::expectException
-     */
-    public function testOverriddenExpectException()
-    {
-        if (!method_exists($this, 'setExpectedException')) {
-            $this->markTestSkipped('PHPUnit\Framework\TestCase::setExpectedException() does not exist.');
-            return;
-        }
-
-        $this->isParentMethodOverriden = ['expectException' => false];
-        $this->expectException('RuntimeException');
-        throw new \RuntimeException();
-    }
-
-    /**
-     * @covers ::expectException
-     */
-    public function testOverriddenExpectExceptionError()
-    {
-        $this->isParentMethodOverriden = ['expectException' => false];
-        $exception = null;
-        try {
-            $this->expectException([]);
-        } catch (\RuntimeException $e) {
-            $exception = $e;
-        }
-        if (class_exists('PHPUnit\Framework\Exception')) {
-            $this->assertInstanceOf('PHPUnit\Framework\Exception', $exception);
-        } else {
-            $this->assertInstanceOf('PHPUnit_Framework_Exception', $exception);
-        }
-    }
-
-    /**
-     * @covers ::expectException
-     */
-    public function testParentExpectException()
-    {
-        if (!parent::isParentMethod('expectException')) {
-            $this->markTestSkipped('PHPUnit\Framework\TestCase::expectException() does not exist.');
-            return;
-        }
-
-        $this->isParentMethodOverriden = ['expectException' => true];
-        $this->expectException('RuntimeException');
-        throw new \RuntimeException();
-    }
-
-    /**
-     * @covers ::expectExceptionCode
-     * @covers ::tearDown
-     */
-    public function testOverriddenExpectExceptionCode()
-    {
-        if (!method_exists($this, 'setExpectedException')) {
-            $this->markTestSkipped('PHPUnit\Framework\TestCase::setExpectedException() does not exist.');
-            return;
-        }
-
-        $this->isParentMethodOverriden = [
-            'expectException' => false,
-            'expectExceptionCode' => false,
-        ];
-        $this->expectException('\RuntimeException');
-        $this->expectExceptionCode(41);
-        throw new \RuntimeException('', 41);
-    }
-
-    /**
-     * @covers ::expectExceptionCode
-     * @covers ::tearDown
-     */
-    public function testOverriddenExpectExceptionCodeError()
-    {
-        $this->isParentMethodOverriden = ['expectExceptionCode' => false];
-        $exception = null;
-        try {
-            $this->expectExceptionCode([]);
-        } catch (\RuntimeException $e) {
-            $exception = $e;
-        }
-        if (class_exists('PHPUnit\Framework\Exception')) {
-            $this->assertInstanceOf('PHPUnit\Framework\Exception', $exception);
-        } else {
-            $this->assertInstanceOf('PHPUnit_Framework_Exception', $exception);
-        }
-    }
-
-    /**
-     * @covers ::expectExceptionCode
-     * @covers ::tearDown
-     */
-    public function testParentExpectExceptionCode()
-    {
-        if (!parent::isParentMethod('expectExceptionCode')) {
-            $this->markTestSkipped('PHPUnit\Framework\TestCase::expectExceptionCode() does not exist.');
-            return;
-        }
-
-        $this->isParentMethodOverriden = ['expectExceptionCode' => true];
-        $this->expectException('RuntimeException');
-        $this->expectExceptionCode(41);
-        throw new \RuntimeException('', 41);
+        $mock = $this->createMock('SergeyMakinen\Tests\Stubs\Class1');
+        $mock
+            ->method('foobar')
+            ->willReturnArgument(0);
+        $this->assertSame('baz', $mock->foobar('baz'));
     }
 
     public function objectProvider()
@@ -186,42 +151,21 @@ class TestCaseTest extends TestCase
         $this->assertSame('protected2', $this->invokeInaccessibleMethod($object, '_protected' . $nameSuffix));
     }
 
-    protected function executeOverriddenAndParentMethod($name, \Closure $closure)
+    public function testFailingTests()
     {
-        $this->isParentMethodOverriden = [$name => false];
-        $closure();
-        $this->isParentMethodOverriden = [];
-
-        if (!parent::isParentMethod($name)) {
-            $this->markTestIncomplete('PHPUnit\Framework\TestCase::' . $name . '() does not exist.');
-            return;
-        }
-
-        $this->isParentMethodOverriden = [$name => true];
-        $closure();
-        $this->isParentMethodOverriden = [];
+        $class = class_exists('PHPUnit_Framework_TestSuite') ? 'PHPUnit_Framework_TestSuite' : 'PHPUnit\Framework\TestSuite';
+        /** @var \PHPUnit_Framework_TestSuite|\PHPUnit\Framework\TestSuite $suite */
+        $suite = new $class();
+        $suite->addTestFile(__DIR__ . '/FailingTestsTest.php');
+        $suite->setRunTestInSeparateProcess(true);
+        $result = $suite->run();
+        $this->assertSame($result->count(), $result->failureCount());
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function isParentMethod($name)
+    protected function assertInstanceOfFrameworkException($actual)
     {
-        if (!isset($this->isParentMethodOverriden[$name])) {
-            return parent::isParentMethod($name);
-        } else {
-            $value = $this->isParentMethodOverriden[$name];
-            unset($this->isParentMethodOverriden[$name]);
-            return $value;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->isParentMethodOverriden = [];
+        $class = class_exists('PHPUnit_Framework_Exception') ? 'PHPUnit_Framework_Exception' : 'PHPUnit\Framework\Exception';
+        $this->assertInstanceOf($class, $actual);
+        $this->setInaccessibleProperty($this, 'expectedException', null);
     }
 }
