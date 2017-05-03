@@ -9,6 +9,7 @@
 
 namespace SergeyMakinen\Tests;
 
+/** @codeCoverageIgnoreStart */
 /** @var \PHPUnit_Runner_Version|\PHPUnit\Runner\Version $class */
 $class = class_exists('PHPUnit_Runner_Version') ? 'PHPUnit_Runner_Version' : 'PHPUnit\Runner\Version';
 $version = $class::id();
@@ -19,6 +20,7 @@ if (version_compare($version, '6.0', '>=')) {
 } else {
     class_alias('SergeyMakinen\Tests\TestCaseVersion4', 'SergeyMakinen\Tests\DynamicTestCase');
 }
+/** @codeCoverageIgnoreEnd */
 
 /**
  * Version independent PHPUnit test case.
