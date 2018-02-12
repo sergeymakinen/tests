@@ -157,6 +157,11 @@ class TestCaseTest extends TestCase
         $this->assertSame('protected2', $this->invokeInaccessibleMethod($object, '_protected' . $nameSuffix));
     }
 
+    public function testAssertEquals()
+    {
+        $this->assertEquals('foo', 'foo');
+    }
+
     public function testFailingTests()
     {
         $class = class_exists('PHPUnit_Framework_TestSuite') ? 'PHPUnit_Framework_TestSuite' : 'PHPUnit\Framework\TestSuite';
