@@ -29,6 +29,8 @@ class TestCaseTest extends TestCase
             $this->expectException([]);
         } catch (\Exception $e) {
             $exception = $e;
+        } catch (\TypeError $e) {
+            $exception = $e;
         }
         $this->assertInstanceOfFrameworkException($exception);
     }
@@ -75,6 +77,8 @@ class TestCaseTest extends TestCase
             $this->expectExceptionMessage([]);
         } catch (\Exception $e) {
             $exception = $e;
+        } catch (\TypeError $e) {
+            $exception = $e;
         }
         $this->assertInstanceOfFrameworkException($exception);
     }
@@ -97,6 +101,8 @@ class TestCaseTest extends TestCase
         try {
             $this->expectExceptionMessageRegExp([]);
         } catch (\Exception $e) {
+            $exception = $e;
+        } catch (\TypeError $e) {
             $exception = $e;
         }
         $this->assertInstanceOfFrameworkException($exception);
@@ -163,6 +169,14 @@ class TestCaseTest extends TestCase
 
     protected function assertInstanceOfFrameworkException($actual)
     {
+        if (
+            class_exists('PHPUnit\Runner\Version')
+            && version_compare(\PHPUnit\Runner\Version::id(), '7.0', '>=')
+            && $actual instanceof \TypeError
+        ) {
+            $this->markTestSkipped('This test is irrelevant on PHPUnit 7.0 or higher');
+        }
+
         $class = class_exists('PHPUnit_Framework_Exception') ? 'PHPUnit_Framework_Exception' : 'PHPUnit\Framework\Exception';
         $this->assertInstanceOf($class, $actual);
         $this->setInaccessibleProperty($this, 'expectedException', null);
