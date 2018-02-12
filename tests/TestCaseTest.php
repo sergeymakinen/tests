@@ -2,6 +2,7 @@
 
 namespace SergeyMakinen\Tests;
 
+use SebastianBergmann\Comparator\DOMNodeComparator;
 use SergeyMakinen\Tests\Stubs\Class2;
 
 /**
@@ -157,9 +158,10 @@ class TestCaseTest extends TestCase
         $this->assertSame('protected2', $this->invokeInaccessibleMethod($object, '_protected' . $nameSuffix));
     }
 
-    public function testAssertEquals()
+    public function testDomNodeComparator()
     {
-        $this->assertEquals('foo', 'foo');
+        $comparator = new DOMNodeComparator();
+        $this->assertTrue(true);
     }
 
     public function testFailingTests()

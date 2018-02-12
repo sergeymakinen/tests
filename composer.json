@@ -20,6 +20,7 @@
     "require": {
         "php": "^5.4 || ^7.0",
         "phpunit/phpunit": "^4.8.25 || ^5.4.3 || ^6.0.5 || ^7.0",
+        "sebastian/comparator": "^1.2.3 || ^2.0",
         "symfony/var-dumper": "^2.8 || ^3.0 || ^4.0"
     },
     "autoload": {
